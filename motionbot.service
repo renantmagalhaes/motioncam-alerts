@@ -1,0 +1,14 @@
+[Unit]
+Description=Motion Detection with Telegram Alerts
+After=network.target
+
+[Service]
+Type=simple
+User=USER
+WorkingDirectory=/home/USER/motion-detector
+ExecStart=/usr/bin/python3 /home/USER/motion-detector/motion_detector.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
