@@ -13,7 +13,8 @@ This project captures an RTSP video stream, detects motion, and sends an alert w
 
 ## TODO
 
-- Enable multiple cameras
+- [ ] Enable multiple cameras
+- [ ] Add time control inside `.env`
 
 ## Setup
 
@@ -93,6 +94,43 @@ The `detection_sensitivity` parameter controls how sensitive the detection is. I
 | `8000`+       | Low sensitivity (only large movements)      |
 
 You can tweak this parameter in your `.env` or directly in `motion_detector.py` to adjust how aggressively alerts are triggered.
+
+### Time-Based Detection Control
+
+The script includes a built-in time filter to only perform motion detection during specific hours of the day. This is useful if you only want alerts during working hours, nighttime, or while you're away from home.
+
+#### 📦 How it works
+The function `is_detection_allowed()` checks the current system time and allows detection only if it falls within a defined range.
+
+By default, it’s configured like this:
+
+```python3
+def is_detection_allowed():
+    now = datetime.now().time()
+    evening_start = time(19, 0)         # 19:00 (7 PM)
+    midnight = time(0, 0)               # 00:00 (midnight)
+    after_midday_end = time(13, 0)      # 13:00 (1 PM)
+
+    return (
+        evening_start <= now <= time(23, 59) or
+        midnight <= now <= after_midday_end
+    )
+```
+
+This setup allows motion detection during:
+
+- Evening to midnight (19:00 to 23:59)
+- Midnight to early afternoon (00:00 to 13:00)
+
+#### How to customize it
+If you want detection to happen at different times, just change the values in the function. For example, to detect only from 9 AM to 5 PM:
+
+```python3
+def is_detection_allowed():
+    now = datetime.now().time()
+    return time(9, 0) <= now <= time(17, 0)
+```
+This gives you full control over when your system should be active — without needing an external scheduler.
 
 ## Camera Compatibility
 
