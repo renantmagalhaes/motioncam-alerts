@@ -15,6 +15,7 @@ This project captures an RTSP video stream, detects motion, and sends an alert w
 
 - [ ] Enable multiple cameras
 - [ ] Add time control inside `.env`
+- [ ] Alert activation based on sound
 
 ## Setup
 
